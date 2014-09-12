@@ -1,0 +1,25 @@
+#! /bin/bash
+
+# script to run cross validation on files to classify between the 5 classes as done in feature extraction v2 file 
+
+input_file=$1 # all_feats.v2_bigram or all_feats.v2 
+
+# get list of files
+cut -d',' -f1 $input_file | sort -u > temp_id_list
+
+rm temp_res
+while read cur_id 
+do
+	grep ^$cur_id, $input_file | cut -d',' -f2- | sed 's/,/ /g' > temp_test
+
+	grep -v ^$cur_id, $input_file | cut -d',' -f2- | sed 's/,/ /g' | grep ^1 | head -n140 >  temp_train
+	grep -v ^$cur_id, $input_file | cut -d',' -f2- | sed 's/,/ /g' | grep ^2 | head -n140 >> temp_train
+        grep -v ^$cur_id, $input_file | cut -d',' -f2- | sed 's/,/ /g' | grep ^3 | head -n140 >> temp_train
+	grep -v ^$cur_id, $input_file | cut -d',' -f2- | sed 's/,/ /g' | grep ^4 | head -n140 >> temp_train
+        grep -v ^$cur_id, $input_file | cut -d',' -f2- | sed 's/,/ /g' | grep ^5 | head -n140 >> temp_train 
+	
+	./maxent-master/bin/maxent temp_train -m model1 -i 30 -g 1
+	./maxent-master/bin/maxent -p temp_test -m model1 -o temp_out
+
+	paste <(cut -d' ' -f1 temp_test) <(cat temp_out) >> temp_res 
+done < temp_id_list 

@@ -1,0 +1,16 @@
+#! /bin/bash
+
+# get 0 1 for if laughter present in a file or not along with each code
+input_dir=$1
+output_dir=$2
+
+for file in $input_dir/*
+do
+
+	echo $file
+	cut -f6-7 $file > temp_code 
+	cut -f8 $file | sed 's/.*\[laugh/\~/g' | sed 's/[^\~]//g' | sed 's/\~/laugh/g' > temp_laugh
+
+	to_save_file=$output_dir/$(basename $file)
+	paste temp_code temp_laugh >$to_save_file
+done

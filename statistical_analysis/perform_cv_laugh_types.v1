@@ -1,0 +1,24 @@
+#! /bin/bash
+
+# script to run cross validation on the laughter types
+
+input_file=$1 # client_laugh_data or couns_laugh_data
+
+# get list of files
+cut -d',' -f1 $input_file | sort -u > temp_id_list
+
+rm temp_res
+while read cur_id 
+do
+	grep ^$cur_id, $input_file | cut -d',' -f3- | sed 's/,/ /g' > temp_test
+
+	grep -v ^$cur_id, $input_file | cut -d',' -f3- | sed 's/,/ /g' | grep ^0 | head -n400 > temp0
+	grep -v ^$cur_id, $input_file | cut -d',' -f3- | sed 's/,/ /g' | grep ^1 | head -n300 > temp1
+	
+	cat temp0 temp1 > temp_train
+
+	./maxent-master/bin/maxent temp_train -m model1 -i 30 -g 1
+	./maxent-master/bin/maxent -p temp_test -m model1 -o temp_out
+
+	paste <(cut -d' ' -f1 temp_test) <(cat temp_out) >>temp_res 
+done < temp_id_list 

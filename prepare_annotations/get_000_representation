@@ -1,0 +1,25 @@
+#! /bin/bash
+
+# get 0 1 for if laughter present in a file or not along with each code
+input_dir=$1 #e.g. ../data/to_use_set_discrete
+output_dir=$2 #e.g. ../data/to_use_set_01
+
+for file in $input_dir/*
+do
+
+	echo $file
+	grep -v ^- $file | cut -f1 > temp_code
+	sed -i s/counselor[^\ ]*/0/g temp_code 
+	sed -i s/client[^\ ]*/1/g temp_code
+
+	grep -v ^- $file | cut -f2 > temp_empathy
+	sed -i s/global.*/1/g temp_empathy
+	sed -i s/-/0/g temp_empathy
+
+	grep -v ^- $file | cut -f3 > temp_laughter
+	sed -i s/laugh/1/g temp_laughter
+	sed -i s/^$/0/g temp_laughter			
+
+	paste -d',' temp_code temp_empathy temp_laughter > $output_dir/$(basename $file)
+
+done

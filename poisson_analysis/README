@@ -1,0 +1,27 @@
+for client laughs
+
+HomPP = 
+
+        EstimatedParameters: 43.0259
+              LogLikelihood: -9.8672e+03
+                        AIC: 1.9736e+04
+             KSHypothesisME: 1
+                 KSPvalueME: 2.5049e-04
+                   KSStatME: 0.0583
+                   RMSError: [1x100 double]
+             KSHypothesisSL: [1x100 double]
+                 KSPvalueSL: [1x100 double]
+                   KSStatSL: [1x100 double]
+      GeneratedPointProcess: [1x113200 double]
+    GeneratedEventsSequence: [1x113200 double]
+
+
+NonHomPP = 
+
+    EstimatedParameters: [1x3029 double]
+          LogLikelihood: -415.9579
+                    AIC: 6.8899e+03
+         KSHypothesisME: 1
+             KSPvalueME: 3.9825e-04
+               KSStatME: 0.0568
+

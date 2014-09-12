@@ -1,0 +1,15 @@
+#! /bin/bash
+
+input_dir=$1 # ../../data/topics_turn
+output_dir=$2
+
+ls $input_dir | cut -d'_' -f1 | sort -u > temp_ids
+
+while read line
+do
+	id=$line
+	to_take_file=$(ls $input_dir/$id'_'* | head -n1)
+	echo $id
+	echo $to_take_file
+	cp $to_take_file $output_dir	
+done < temp_ids
